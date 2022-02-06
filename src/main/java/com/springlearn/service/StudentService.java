@@ -20,6 +20,6 @@ public class StudentService {
     }
 
     public Student findStudentById(Long accountId){
-        return studentRepository.findOne(accountId);
+        return studentRepository.findById(accountId);
     }
 }

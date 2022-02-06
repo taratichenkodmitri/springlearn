@@ -10,13 +10,13 @@ public class School {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long studentId;
+    private Long schoolId;
 
     private String title;
 
-    private Integer type;
+    private Long type;
 
-    public School(String title, Integer type) {
+    public School(String title, Long type) {
         this.title = title;
         this.type = type;
     }
@@ -25,12 +25,12 @@ public class School {
 
     }
 
-    public Long getStudentId() {
-        return studentId;
+    public Long getSchoolId() {
+        return schoolId;
     }
 
-    public void setStudentId(Long studentId) {
-        this.studentId = studentId;
+    public void setSchoolId(Long studentId) {
+        this.schoolId = studentId;
     }
 
     public String getTitle() {
@@ -41,18 +41,18 @@ public class School {
         this.title = title;
     }
 
-    public Integer getType() {
+    public Long getType() {
         return type;
     }
 
-    public void setType(Integer type) {
+    public void setType(Long type) {
         this.type = type;
     }
 
     @Override
     public String toString() {
         return "School{" +
-                "studentId=" + studentId +
+                "studentId=" + schoolId +
                 ", title='" + title + '\'' +
                 ", type=" + type +
                 '}';
