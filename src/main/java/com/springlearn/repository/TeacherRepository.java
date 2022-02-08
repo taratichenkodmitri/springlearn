@@ -1,62 +1,62 @@
 package com.springlearn.repository;
 
-import com.springlearn.entity.Student;
+import com.springlearn.entity.Teacher;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
-public class StudentRepository {
+public class TeacherRepository {
+
     private final SessionFactory sessionFactory;
 
     @Autowired
-    public StudentRepository(SessionFactory sessionFactory) {
+    public TeacherRepository(SessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
     }
 
-    public Student save(Student student) {
+    public Teacher save(Teacher teacher) {
         Session session = sessionFactory.openSession();
         session.beginTransaction();
-        session.save(student);
+        session.save(teacher);
         session.flush();
         session.getTransaction().commit();
         session.close();
-        return student;
+        return teacher;
     }
 
-    public Student findById(Long studentId){
+    public Teacher findById(Long teacherId){
         Session session = sessionFactory.openSession();
-        Student student = session.find(Student.class, studentId);
+        Teacher teacher = session.find(Teacher.class, teacherId);
         session.close();
 
-        return student;
-    }
-    
-    public Student updateById(Long studentId, Student student) {
-        Session session = sessionFactory.openSession();
-        session.beginTransaction();
-        Student updatedStudent = session.find(Student.class, studentId);
-        updatedStudent.setName(student.getName());
-        updatedStudent.setUin(student.getUin());
-        session.update(updatedStudent);
-        session.flush();
-        session.getTransaction().commit();
-        session.close();
-
-        return updatedStudent;
+        return teacher;
     }
 
-    public Student deleteById(Long studentId){
+    public Teacher updateById(Long teacherId, Teacher teacher) {
         Session session = sessionFactory.openSession();
         session.beginTransaction();
-        Student student = session.find(Student.class, studentId);
-        session.delete(student);
+        Teacher updatedTeacher = session.find(Teacher.class, teacherId);
+        updatedTeacher.setName(teacher.getName());
+        updatedTeacher.setUin(teacher.getUin());
+        session.update(updatedTeacher);
         session.flush();
         session.getTransaction().commit();
         session.close();
 
-        return student;
+        return updatedTeacher;
     }
 
+    public Teacher deleteById(Long teacherId){
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+        Teacher teacher = session.find(Teacher.class, teacherId);
+        session.delete(teacher);
+        session.flush();
+        session.getTransaction().commit();
+        session.close();
+
+        return teacher;
+    }
 }

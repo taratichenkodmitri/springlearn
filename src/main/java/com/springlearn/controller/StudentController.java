@@ -25,4 +25,16 @@ public class StudentController {
     public StudentResponseDto getStudent(@PathVariable Long studentId){
         return new StudentResponseDto(studentService.findStudentById(studentId));
     }
+
+    @RequestMapping(value = "/students/{studentId}", method = RequestMethod.DELETE)
+    public StudentResponseDto deleteStudent(@PathVariable Long studentId) {
+        return new StudentResponseDto(studentService.deleteStudentById(studentId));
+    }
+
+    @RequestMapping(value = "/students/{studentId}", method = RequestMethod.PATCH)
+    public StudentResponseDto updateStudent(@RequestBody StudentRequestDto studentRequestDto,
+                                            @PathVariable Long studentId ) {
+        return new StudentResponseDto(studentService.
+                        updateStudent(studentId, studentRequestDto.getName(), studentRequestDto.getUin()));
+    }
 }
