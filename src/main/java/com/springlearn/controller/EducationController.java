@@ -31,12 +31,12 @@ public class EducationController {
     }
 
     @RequestMapping(value = "/education/{educationId}", method = RequestMethod.GET)
-    public EducationResponseDto getEducation(@PathVariable Long educationId) {
+    public EducationResponseDto getEducation(@PathVariable Long educationId) throws ExceptionEducationNotFound {
         return new EducationResponseDto(educationService.findEducationById(educationId));
     }
 
     @RequestMapping(value = "/educationForStudents/{studentId}", method = RequestMethod.DELETE)
-    public EducationResponseDto deleteEducationByStudentId(@PathVariable Long studentId) throws ExceptionCurrentEducationNotFound {
+    public EducationResponseDto deleteEducationByStudentId(@PathVariable Long studentId) throws ExceptionCurrentEducationNotFound, ExceptionEducationNotFound {
         return new EducationResponseDto(educationService.deleteEducationByStudentId(studentId));
     }
 
@@ -47,7 +47,7 @@ public class EducationController {
 
     @RequestMapping(value = "/education/{educationId}", method = RequestMethod.PATCH)
     public EducationResponseDto updateEducation(@PathVariable Long educationId,
-                                     @RequestBody EducationRequestDto educationRequestDto) {
+                                     @RequestBody EducationRequestDto educationRequestDto) throws ExceptionEducationNotFound {
         return new EducationResponseDto(educationService.updateSchool(educationId,
                 educationRequestDto.getStudentId(),
                 educationRequestDto.getSchoolId(),
@@ -64,7 +64,8 @@ public class EducationController {
     @ExceptionHandler({ExceptionStudentNotFound.class,
             ExceptionSchoolNotFound.class,
             ExceptionAlreadyCurrentEducation.class,
-            ExceptionCurrentEducationNotFound.class})
+            ExceptionCurrentEducationNotFound.class,
+            ExceptionEducationNotFound.class})
     public ResponseException handleException(Exceptions e) {
         return new ResponseException(e.getMessage());
     }

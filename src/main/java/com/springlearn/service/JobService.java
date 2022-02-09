@@ -1,6 +1,7 @@
 package com.springlearn.service;
 
 import com.springlearn.entity.Job;
+import com.springlearn.exception.ExceptionJobNotFound;
 import com.springlearn.exception.ExceptionSchoolNotFound;
 import com.springlearn.exception.ExceptionTeacherNotFound;
 import com.springlearn.repository.JobRepository;
@@ -22,16 +23,16 @@ public class JobService {
         return jobRepository.save(new Job(teacherId, schoolId)).getJobId();
     }
 
-    public Job findJobById(Long jobId) {
+    public Job findJobById(Long jobId) throws ExceptionJobNotFound {
         return jobRepository.findById(jobId);
     }
 
-    public Job updateJob(Long educationId, Long teacherId, Long schoolId) {
+    public Job updateJob(Long educationId, Long teacherId, Long schoolId) throws ExceptionJobNotFound {
         return jobRepository.updateById(educationId, new Job(teacherId, schoolId));
     }
 
 
-    public Job deleteJobById(Long jobId) {
+    public Job deleteJobById(Long jobId) throws ExceptionJobNotFound {
         return jobRepository.deleteById(jobId);
     }
 

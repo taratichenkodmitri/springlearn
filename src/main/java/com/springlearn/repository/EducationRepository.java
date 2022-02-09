@@ -3,10 +3,7 @@ package com.springlearn.repository;
 import com.springlearn.entity.Education;
 import com.springlearn.entity.School;
 import com.springlearn.entity.Student;
-import com.springlearn.exception.ExceptionAlreadyCurrentEducation;
-import com.springlearn.exception.ExceptionCurrentEducationNotFound;
-import com.springlearn.exception.ExceptionSchoolNotFound;
-import com.springlearn.exception.ExceptionStudentNotFound;
+import com.springlearn.exception.*;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,17 +46,23 @@ public class EducationRepository {
         return education;
     }
 
-    public Education findById(Long educationId){
+    public Education findById(Long educationId) throws ExceptionEducationNotFound {
         Session session = sessionFactory.openSession();
         Education education = session.find(Education.class, educationId);
+        if(education == null) {
+            throw new ExceptionEducationNotFound(educationId);
+        }
         session.close();
         return education;
     }
 
-    public Education updateById(Long educationId, Education education) {
+    public Education updateById(Long educationId, Education education) throws ExceptionEducationNotFound {
         Session session = sessionFactory.openSession();
         session.beginTransaction();
         Education updatedEducation = session.find(Education.class, educationId);
+        if(updatedEducation == null) {
+            throw new ExceptionEducationNotFound(educationId);
+        }
         updatedEducation.setStudentId(education.getStudentId());
         updatedEducation.setSchoolId(education.getSchoolId());
         updatedEducation.setCurrent(education.getCurrent());
@@ -83,7 +86,7 @@ public class EducationRepository {
         return education;
     }
 
-    public Education deleteByStudentId(Long studentId) throws ExceptionCurrentEducationNotFound {
+    public Education deleteByStudentId(Long studentId) throws ExceptionCurrentEducationNotFound, ExceptionEducationNotFound {
         Session session = sessionFactory.openSession();
         session.beginTransaction();
         List<Education> allEducationsForStudent = getAllEducationsForStudent(studentId);

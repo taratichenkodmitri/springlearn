@@ -2,6 +2,7 @@ package com.springlearn.controller;
 
 import com.springlearn.controller.dto.JobRequestDto;
 import com.springlearn.controller.dto.JobResponseDto;
+import com.springlearn.exception.ExceptionJobNotFound;
 import com.springlearn.exception.Exceptions;
 import com.springlearn.exception.ExceptionSchoolNotFound;
 import com.springlearn.exception.ExceptionTeacherNotFound;
@@ -29,18 +30,18 @@ public class JobController {
     }
 
     @RequestMapping(value = "/job/{jobId}", method = RequestMethod.GET)
-    public JobResponseDto getJob(@PathVariable Long jobId) {
+    public JobResponseDto getJob(@PathVariable Long jobId) throws ExceptionJobNotFound {
         return new JobResponseDto(jobService.findJobById(jobId));
     }
 
     @RequestMapping(value = "/job/{jobId}", method = RequestMethod.DELETE)
-    public JobResponseDto deleteJob(@PathVariable Long jobId) {
+    public JobResponseDto deleteJob(@PathVariable Long jobId) throws ExceptionJobNotFound {
         return new JobResponseDto(jobService.deleteJobById(jobId));
     }
 
     @RequestMapping(value = "/job/{jobId}", method = RequestMethod.PATCH)
     public JobResponseDto updateJob (@PathVariable Long jobId,
-                                                @RequestBody JobRequestDto jobRequestDto) {
+                                                @RequestBody JobRequestDto jobRequestDto) throws ExceptionJobNotFound {
         return new JobResponseDto(jobService.updateJob(jobId,
                 jobRequestDto.getTeacherId(),
                 jobRequestDto.getSchoolId()));
@@ -54,7 +55,8 @@ public class JobController {
     }
 
     @ExceptionHandler({ExceptionTeacherNotFound.class,
-            ExceptionSchoolNotFound.class})
+            ExceptionSchoolNotFound.class,
+            ExceptionJobNotFound.class})
     public ResponseException handleException(Exceptions e) {
         return new ResponseException(e.getMessage());
     }

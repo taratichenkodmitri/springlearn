@@ -1,10 +1,7 @@
 package com.springlearn.service;
 
 import com.springlearn.entity.Education;
-import com.springlearn.exception.ExceptionAlreadyCurrentEducation;
-import com.springlearn.exception.ExceptionCurrentEducationNotFound;
-import com.springlearn.exception.ExceptionSchoolNotFound;
-import com.springlearn.exception.ExceptionStudentNotFound;
+import com.springlearn.exception.*;
 import com.springlearn.repository.EducationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,11 +24,11 @@ public class EducationService {
         return educationRepository.save(new Education(studentId, schoolId,isCurrent)).getEducationId();
     }
 
-    public Education findEducationById(Long educationId) {
+    public Education findEducationById(Long educationId) throws ExceptionEducationNotFound {
         return educationRepository.findById(educationId);
     }
 
-    public Education updateSchool(Long educationId, Long studentId, Long schoolId, Boolean current) {
+    public Education updateSchool(Long educationId, Long studentId, Long schoolId, Boolean current) throws ExceptionEducationNotFound {
         return educationRepository.updateById(educationId, new Education(studentId, schoolId, current));
     }
 
@@ -40,7 +37,7 @@ public class EducationService {
         return educationRepository.deleteById(educationId);
     }
 
-    public Education deleteEducationByStudentId(Long studentId) throws ExceptionCurrentEducationNotFound {
+    public Education deleteEducationByStudentId(Long studentId) throws ExceptionCurrentEducationNotFound, ExceptionEducationNotFound {
         return educationRepository.deleteByStudentId(studentId);
     }
 

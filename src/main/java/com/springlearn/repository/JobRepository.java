@@ -1,6 +1,7 @@
 package com.springlearn.repository;
 
 import com.springlearn.entity.*;
+import com.springlearn.exception.ExceptionJobNotFound;
 import com.springlearn.exception.ExceptionSchoolNotFound;
 import com.springlearn.exception.ExceptionTeacherNotFound;
 import org.hibernate.Session;
@@ -37,17 +38,23 @@ public class JobRepository {
         return job;
     }
 
-    public Job findById(Long jobId){
+    public Job findById(Long jobId) throws ExceptionJobNotFound {
         Session session = sessionFactory.openSession();
         Job job = session.find(Job.class, jobId);
+        if(job == null) {
+            throw new ExceptionJobNotFound(jobId);
+        }
         session.close();
         return job;
     }
 
-    public Job updateById(Long jobId, Job job) {
+    public Job updateById(Long jobId, Job job) throws ExceptionJobNotFound {
         Session session = sessionFactory.openSession();
         session.beginTransaction();
         Job updatedJob = session.find(Job.class, jobId);
+        if(updatedJob == null) {
+            throw new ExceptionJobNotFound(jobId);
+        }
         updatedJob.setTeacherId(job.getTeacherId());
         updatedJob.setSchoolId(job.getSchoolId());
         session.update(updatedJob);
@@ -58,10 +65,13 @@ public class JobRepository {
         return updatedJob;
     }
 
-    public Job deleteById(Long jobId) {
+    public Job deleteById(Long jobId) throws ExceptionJobNotFound {
         Session session = sessionFactory.openSession();
         session.beginTransaction();
         Job job = session.find(Job.class, jobId);
+        if(job == null) {
+            throw new ExceptionJobNotFound(jobId);
+        }
         session.delete(job);
         session.flush();
         session.getTransaction().commit();
