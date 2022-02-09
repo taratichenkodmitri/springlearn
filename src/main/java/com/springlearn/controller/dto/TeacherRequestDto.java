@@ -1,8 +1,14 @@
 package com.springlearn.controller.dto;
 
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
+
+@JacksonXmlRootElement(localName = "Teacher")
 public class TeacherRequestDto {
+    @JacksonXmlProperty(localName = "name")
     private String name;
 
+    @JacksonXmlProperty(localName = "uin")
     private Long uin;
 
     public String getName() {

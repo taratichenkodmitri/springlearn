@@ -2,10 +2,7 @@ package com.springlearn.controller;
 
 import com.springlearn.controller.dto.EducationRequestDto;
 import com.springlearn.controller.dto.EducationResponseDto;
-import com.springlearn.exception.EducationException;
-import com.springlearn.exception.EducationExceptionCurrent;
-import com.springlearn.exception.EducationExceptionSchoolNotFound;
-import com.springlearn.exception.EducationExceptionStudentNotFound;
+import com.springlearn.exception.*;
 import com.springlearn.exception.response.ResponseException;
 import com.springlearn.service.EducationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,9 +22,9 @@ public class EducationController {
 
     @RequestMapping(value = "/education", method = RequestMethod.POST)
     public Long createEducation(@RequestBody EducationRequestDto educationRequestDto)
-            throws EducationExceptionStudentNotFound,
-            EducationExceptionSchoolNotFound,
-            EducationExceptionCurrent {
+            throws ExceptionStudentNotFound,
+            ExceptionSchoolNotFound,
+            ExceptionAlreadyCurrentEducation {
         return educationService.saveEducation(educationRequestDto.getStudentId(),
                 educationRequestDto.getSchoolId(),
                 educationRequestDto.getCurrent());
@@ -39,7 +36,7 @@ public class EducationController {
     }
 
     @RequestMapping(value = "/educationForStudents/{studentId}", method = RequestMethod.DELETE)
-    public EducationResponseDto deleteEducationByStudentId(@PathVariable Long studentId) throws EducationExceptionCurrent {
+    public EducationResponseDto deleteEducationByStudentId(@PathVariable Long studentId) throws ExceptionCurrentEducationNotFound {
         return new EducationResponseDto(educationService.deleteEducationByStudentId(studentId));
     }
 
@@ -64,10 +61,11 @@ public class EducationController {
                 .map(EducationResponseDto::new).collect(Collectors.toList());
     }
 
-    @ExceptionHandler({EducationExceptionStudentNotFound.class,
-            EducationExceptionSchoolNotFound.class,
-            EducationExceptionCurrent.class})
-    public ResponseException handleException(EducationException e) {
+    @ExceptionHandler({ExceptionStudentNotFound.class,
+            ExceptionSchoolNotFound.class,
+            ExceptionAlreadyCurrentEducation.class,
+            ExceptionCurrentEducationNotFound.class})
+    public ResponseException handleException(Exceptions e) {
         return new ResponseException(e.getMessage());
     }
 }

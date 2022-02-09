@@ -1,5 +1,5 @@
 package com.springlearn.exception;
 
-public interface EducationException {
+public interface Exceptions {
     public String getMessage();
 }

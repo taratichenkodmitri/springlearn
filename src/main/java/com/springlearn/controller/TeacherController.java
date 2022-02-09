@@ -4,8 +4,13 @@ import com.springlearn.controller.dto.StudentRequestDto;
 import com.springlearn.controller.dto.StudentResponseDto;
 import com.springlearn.controller.dto.TeacherRequestDto;
 import com.springlearn.controller.dto.TeacherResponseDto;
+import com.springlearn.exception.ExceptionStudentNotFound;
+import com.springlearn.exception.ExceptionTeacherNotFound;
+import com.springlearn.exception.Exceptions;
+import com.springlearn.exception.response.ResponseException;
 import com.springlearn.service.TeacherService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -18,12 +23,12 @@ public class TeacherController {
     }
 
     @RequestMapping(value = "/teachers", method = RequestMethod.POST)
-    public Long createStudent(@RequestBody TeacherRequestDto teacherRequestDto) {
+    public Long createTeacher(@RequestBody TeacherRequestDto teacherRequestDto) {
         return teacherService.saveTeacher(teacherRequestDto.getName(), teacherRequestDto.getUin());
     }
 
     @RequestMapping(value = "/teachers/{teacherId}", method = RequestMethod.GET)
-    public TeacherResponseDto getTeacher(@PathVariable Long teacherId){
+    public TeacherResponseDto getTeacher(@PathVariable Long teacherId) throws ExceptionTeacherNotFound {
         return new TeacherResponseDto(teacherService.findTeacherById(teacherId));
     }
 
@@ -32,10 +37,15 @@ public class TeacherController {
         return new TeacherResponseDto(teacherService.deleteTeacherById(teacherId));
     }
 
-    @RequestMapping(value = "/teachers/{teacherId}", method = RequestMethod.PATCH)
-    public TeacherResponseDto updateStudent(@RequestBody StudentRequestDto studentRequestDto,
-                                            @PathVariable Long teacherId ) {
+    @RequestMapping(value = "/teachers/{teacherId}", method = RequestMethod.PATCH, produces = "application/xml")
+    public TeacherResponseDto updateTeacher(@RequestBody StudentRequestDto studentRequestDto,
+                                            @PathVariable Long teacherId ) throws ExceptionTeacherNotFound {
         return new TeacherResponseDto(teacherService.
                 updateTeacher(teacherId, studentRequestDto.getName(), studentRequestDto.getUin()));
+    }
+
+    @ExceptionHandler({ExceptionTeacherNotFound.class})
+    public ResponseException handleException(Exceptions e) {
+        return new ResponseException(e.getMessage());
     }
 }

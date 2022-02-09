@@ -1,6 +1,8 @@
 package com.springlearn.repository;
 
 import com.springlearn.entity.Student;
+import com.springlearn.exception.ExceptionSchoolNotFound;
+import com.springlearn.exception.ExceptionStudentNotFound;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,18 +27,24 @@ public class StudentRepository {
         return student;
     }
 
-    public Student findById(Long studentId){
+    public Student findById(Long studentId) throws ExceptionStudentNotFound {
         Session session = sessionFactory.openSession();
         Student student = session.find(Student.class, studentId);
+        if(student == null) {
+            throw new ExceptionStudentNotFound(studentId);
+        }
         session.close();
 
         return student;
     }
     
-    public Student updateById(Long studentId, Student student) {
+    public Student updateById(Long studentId, Student student) throws ExceptionStudentNotFound {
         Session session = sessionFactory.openSession();
         session.beginTransaction();
         Student updatedStudent = session.find(Student.class, studentId);
+        if(updatedStudent == null) {
+            throw new ExceptionStudentNotFound(studentId);
+        }
         updatedStudent.setName(student.getName());
         updatedStudent.setUin(student.getUin());
         session.update(updatedStudent);
@@ -47,10 +55,13 @@ public class StudentRepository {
         return updatedStudent;
     }
 
-    public Student deleteById(Long studentId){
+    public Student deleteById(Long studentId) throws ExceptionStudentNotFound {
         Session session = sessionFactory.openSession();
         session.beginTransaction();
         Student student = session.find(Student.class, studentId);
+        if(student == null) {
+            throw new ExceptionStudentNotFound(studentId);
+        }
         session.delete(student);
         session.flush();
         session.getTransaction().commit();

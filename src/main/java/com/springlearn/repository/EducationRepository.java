@@ -3,9 +3,10 @@ package com.springlearn.repository;
 import com.springlearn.entity.Education;
 import com.springlearn.entity.School;
 import com.springlearn.entity.Student;
-import com.springlearn.exception.EducationExceptionCurrent;
-import com.springlearn.exception.EducationExceptionSchoolNotFound;
-import com.springlearn.exception.EducationExceptionStudentNotFound;
+import com.springlearn.exception.ExceptionAlreadyCurrentEducation;
+import com.springlearn.exception.ExceptionCurrentEducationNotFound;
+import com.springlearn.exception.ExceptionSchoolNotFound;
+import com.springlearn.exception.ExceptionStudentNotFound;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,23 +24,20 @@ public class EducationRepository {
         this.sessionFactory = sessionFactory;
     }
 
-    public Education save(Education education) throws EducationExceptionStudentNotFound, EducationExceptionSchoolNotFound, EducationExceptionCurrent {
+    public Education save(Education education) throws ExceptionStudentNotFound, ExceptionSchoolNotFound, ExceptionAlreadyCurrentEducation {
         Session session = sessionFactory.openSession();
         session.beginTransaction();
         if(session.find(Student.class, education.getStudentId()) == null) {
-            throw new EducationExceptionStudentNotFound(
-                    "Student with id: " + education.getStudentId() + " is doesn't exist");
+            throw new ExceptionStudentNotFound(education.getStudentId());
         }
         if(session.find(School.class, education.getSchoolId()) == null) {
-            throw new EducationExceptionSchoolNotFound(
-                    "School with id: " + education.getSchoolId() + " is doesn't exist");
+            throw new ExceptionSchoolNotFound(education.getSchoolId());
         }
 
         List<Education> allEducationsForStudent = getAllEducationsForStudent(education.getStudentId());
         for(Education ed: allEducationsForStudent){
            if(ed.getCurrent() == true) {
-               throw new EducationExceptionCurrent(
-                       "Student already learning in school with id: " + ed.getSchoolId());
+               throw new ExceptionAlreadyCurrentEducation(ed.getSchoolId());
            }
             session.update(ed);
         }
@@ -85,7 +83,7 @@ public class EducationRepository {
         return education;
     }
 
-    public Education deleteByStudentId(Long studentId) throws EducationExceptionCurrent {
+    public Education deleteByStudentId(Long studentId) throws ExceptionCurrentEducationNotFound {
         Session session = sessionFactory.openSession();
         session.beginTransaction();
         List<Education> allEducationsForStudent = getAllEducationsForStudent(studentId);
@@ -97,7 +95,7 @@ public class EducationRepository {
                 return ed;
             }
         }
-        throw new EducationExceptionCurrent("Student nowhere to study");
+        throw new ExceptionCurrentEducationNotFound();
     }
 
     public List<Education> getAllEducationsForStudent(Long studentId){

@@ -2,6 +2,7 @@ package com.springlearn.service;
 
 import com.springlearn.entity.Student;
 import com.springlearn.entity.Teacher;
+import com.springlearn.exception.ExceptionTeacherNotFound;
 import com.springlearn.repository.TeacherRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,11 +20,11 @@ public class TeacherService {
         return teacherRepository.save(new Teacher(name, uin)).getTeacherId();
     }
 
-    public Teacher findTeacherById(Long teacherId){
+    public Teacher findTeacherById(Long teacherId) throws ExceptionTeacherNotFound {
         return teacherRepository.findById(teacherId);
     }
 
-    public Teacher updateTeacher(Long teacherId, String name, Long uin) {
+    public Teacher updateTeacher(Long teacherId, String name, Long uin) throws ExceptionTeacherNotFound {
         return teacherRepository.updateById(teacherId, new Teacher(name, uin));
     }
 

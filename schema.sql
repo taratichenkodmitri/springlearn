@@ -42,3 +42,14 @@ CREATE TABLE IF NOT EXISTS Education
     FOREIGN KEY (schoolId) REFERENCES School (schoolId),
     PRIMARY KEY (educationId)
 );
+
+CREATE TABLE IF NOT EXISTS Job
+(
+
+    jobId BIGINT  NOT NULL AUTO_INCREMENT,
+    teacherId   BIGINT  NOT NULL,
+    schoolId    BIGINT  NOT NULL,
+    FOREIGN KEY (teacherId) REFERENCES Teacher (teacherId) ,
+    FOREIGN KEY (schoolId) REFERENCES School (schoolId),
+    PRIMARY KEY (jobId)
+);

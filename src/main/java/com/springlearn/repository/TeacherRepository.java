@@ -1,6 +1,8 @@
 package com.springlearn.repository;
 
 import com.springlearn.entity.Teacher;
+import com.springlearn.exception.ExceptionStudentNotFound;
+import com.springlearn.exception.ExceptionTeacherNotFound;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,18 +28,24 @@ public class TeacherRepository {
         return teacher;
     }
 
-    public Teacher findById(Long teacherId){
+    public Teacher findById(Long teacherId) throws ExceptionTeacherNotFound {
         Session session = sessionFactory.openSession();
         Teacher teacher = session.find(Teacher.class, teacherId);
+        if(teacher == null) {
+            throw new ExceptionTeacherNotFound(teacherId);
+        }
         session.close();
 
         return teacher;
     }
 
-    public Teacher updateById(Long teacherId, Teacher teacher) {
+    public Teacher updateById(Long teacherId, Teacher teacher) throws ExceptionTeacherNotFound {
         Session session = sessionFactory.openSession();
         session.beginTransaction();
         Teacher updatedTeacher = session.find(Teacher.class, teacherId);
+        if(updatedTeacher == null) {
+            throw new ExceptionTeacherNotFound(teacherId);
+        }
         updatedTeacher.setName(teacher.getName());
         updatedTeacher.setUin(teacher.getUin());
         session.update(updatedTeacher);

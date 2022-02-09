@@ -1,6 +1,7 @@
 package com.springlearn.service;
 
 import com.springlearn.entity.School;
+import com.springlearn.exception.ExceptionSchoolNotFound;
 import com.springlearn.repository.SchoolRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,15 +19,15 @@ public class SchoolService {
         return schoolRepository.save(new School(title, type)).getSchoolId();
     }
 
-    public School findSchoolById(Long schoolId) {
+    public School findSchoolById(Long schoolId) throws ExceptionSchoolNotFound {
         return schoolRepository.findById(schoolId);
     }
 
-    public School updateSchool(Long schoolId, String title, Long type) {
+    public School updateSchool(Long schoolId, String title, Long type) throws ExceptionSchoolNotFound {
         return schoolRepository.updateById(schoolId, new School(title, type));
     }
 
-    public School deleteSchoolByid(Long schoolId) {
+    public School deleteSchoolByid(Long schoolId) throws ExceptionSchoolNotFound {
         return schoolRepository.deleteById(schoolId);
     }
 }
