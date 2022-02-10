@@ -1,10 +1,7 @@
 package com.springlearn.repository;
 
 import com.springlearn.entity.School;
-import com.springlearn.entity.Student;
-import com.springlearn.entity.Teacher;
 import com.springlearn.exception.ExceptionSchoolNotFound;
-import com.springlearn.exception.ExceptionTeacherNotFound;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;

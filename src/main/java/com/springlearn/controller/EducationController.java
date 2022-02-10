@@ -8,6 +8,7 @@ import com.springlearn.service.EducationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -24,7 +25,8 @@ public class EducationController {
     public Long createEducation(@RequestBody EducationRequestDto educationRequestDto)
             throws ExceptionStudentNotFound,
             ExceptionSchoolNotFound,
-            ExceptionAlreadyCurrentEducation {
+            ExceptionAlreadyCurrentEducation,
+            IOException, ExceptionNotValidQuestionably {
         return educationService.saveEducation(educationRequestDto.getStudentId(),
                 educationRequestDto.getSchoolId(),
                 educationRequestDto.getCurrent());
@@ -65,7 +67,9 @@ public class EducationController {
             ExceptionSchoolNotFound.class,
             ExceptionAlreadyCurrentEducation.class,
             ExceptionCurrentEducationNotFound.class,
-            ExceptionEducationNotFound.class})
+            ExceptionEducationNotFound.class,
+            IOException.class,
+            ExceptionNotValidQuestionably.class})
     public ResponseException handleException(Exceptions e) {
         return new ResponseException(e.getMessage());
     }

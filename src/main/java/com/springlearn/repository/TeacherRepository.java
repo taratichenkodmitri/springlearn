@@ -1,7 +1,6 @@
 package com.springlearn.repository;
 
 import com.springlearn.entity.Teacher;
-import com.springlearn.exception.ExceptionStudentNotFound;
 import com.springlearn.exception.ExceptionTeacherNotFound;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -56,10 +55,13 @@ public class TeacherRepository {
         return updatedTeacher;
     }
 
-    public Teacher deleteById(Long teacherId){
+    public Teacher deleteById(Long teacherId) throws ExceptionTeacherNotFound {
         Session session = sessionFactory.openSession();
         session.beginTransaction();
         Teacher teacher = session.find(Teacher.class, teacherId);
+        if(teacher == null) {
+            throw new ExceptionTeacherNotFound(teacherId);
+        }
         session.delete(teacher);
         session.flush();
         session.getTransaction().commit();

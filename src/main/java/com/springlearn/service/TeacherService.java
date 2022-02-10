@@ -1,6 +1,5 @@
 package com.springlearn.service;
 
-import com.springlearn.entity.Student;
 import com.springlearn.entity.Teacher;
 import com.springlearn.exception.ExceptionTeacherNotFound;
 import com.springlearn.repository.TeacherRepository;
@@ -28,7 +27,7 @@ public class TeacherService {
         return teacherRepository.updateById(teacherId, new Teacher(name, uin));
     }
 
-    public Teacher deleteTeacherById(Long teacherId) {
+    public Teacher deleteTeacherById(Long teacherId) throws ExceptionTeacherNotFound {
         return teacherRepository.deleteById(teacherId);
     }
 }

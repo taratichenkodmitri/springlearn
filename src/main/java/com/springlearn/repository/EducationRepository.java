@@ -1,15 +1,15 @@
 package com.springlearn.repository;
 
 import com.springlearn.entity.Education;
-import com.springlearn.entity.School;
-import com.springlearn.entity.Student;
 import com.springlearn.exception.*;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 public class EducationRepository {
@@ -24,19 +24,12 @@ public class EducationRepository {
     public Education save(Education education) throws ExceptionStudentNotFound, ExceptionSchoolNotFound, ExceptionAlreadyCurrentEducation {
         Session session = sessionFactory.openSession();
         session.beginTransaction();
-        if(session.find(Student.class, education.getStudentId()) == null) {
-            throw new ExceptionStudentNotFound(education.getStudentId());
-        }
-        if(session.find(School.class, education.getSchoolId()) == null) {
-            throw new ExceptionSchoolNotFound(education.getSchoolId());
-        }
 
         List<Education> allEducationsForStudent = getAllEducationsForStudent(education.getStudentId());
         for(Education ed: allEducationsForStudent){
-           if(ed.getCurrent() == true) {
+           if(ed.getCurrent()) {
                throw new ExceptionAlreadyCurrentEducation(ed.getSchoolId());
            }
-            session.update(ed);
         }
 
         session.save(education);
@@ -86,14 +79,15 @@ public class EducationRepository {
         return education;
     }
 
-    public Education deleteByStudentId(Long studentId) throws ExceptionCurrentEducationNotFound, ExceptionEducationNotFound {
+    public Education deleteByStudentId(Long studentId) throws ExceptionCurrentEducationNotFound,
+            ExceptionEducationNotFound {
         Session session = sessionFactory.openSession();
         session.beginTransaction();
         List<Education> allEducationsForStudent = getAllEducationsForStudent(studentId);
         for(Education ed: allEducationsForStudent){
-            if(ed.getCurrent() == true) {
+            if(ed.getCurrent()) {
                 ed.setCurrent(false);
-                Education updatedEd = updateById(ed.getEducationId(),
+                updateById(ed.getEducationId(),
                         new Education(ed.getStudentId(), ed.getSchoolId(), false));
                 return ed;
             }
@@ -105,9 +99,20 @@ public class EducationRepository {
             List<Education> educations;
             Session session = sessionFactory.openSession();
             session.beginTransaction();
-            educations = session.createSQLQuery("SELECT * FROM Education as e WHERE e.studentId = " + studentId)
+            educations = session
+                    .createSQLQuery("SELECT * FROM Education as e WHERE e.studentId = " + studentId)
                     .addEntity(Education.class).list();
 
             return educations;
+    }
+
+
+    public List<String> getQuestionCodes(Long type) {
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+        List<String> listQuestionCode = session
+                .createSQLQuery("SELECT value FROM QuestionCode AS q WHERE q.type = " + type)
+                .list();
+        return  Arrays.stream(listQuestionCode.get(0).split(",")).collect(Collectors.toList());
     }
 }

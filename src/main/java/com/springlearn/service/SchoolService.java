@@ -27,7 +27,7 @@ public class SchoolService {
         return schoolRepository.updateById(schoolId, new School(title, type));
     }
 
-    public School deleteSchoolByid(Long schoolId) throws ExceptionSchoolNotFound {
+    public School deleteSchoolById(Long schoolId) throws ExceptionSchoolNotFound {
         return schoolRepository.deleteById(schoolId);
     }
 }

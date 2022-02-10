@@ -3,7 +3,6 @@ package com.springlearn.controller;
 import com.springlearn.controller.dto.SchoolRequestDto;
 import com.springlearn.controller.dto.SchoolResponseDto;
 import com.springlearn.exception.ExceptionSchoolNotFound;
-import com.springlearn.exception.ExceptionTeacherNotFound;
 import com.springlearn.exception.Exceptions;
 import com.springlearn.exception.response.ResponseException;
 import com.springlearn.service.SchoolService;
@@ -32,7 +31,7 @@ public class SchoolController {
 
     @RequestMapping(value = "/school/{schoolId}", method = RequestMethod.DELETE)
     public SchoolResponseDto deleteSchool(@PathVariable Long schoolId) throws ExceptionSchoolNotFound {
-        return new SchoolResponseDto(schoolService.deleteSchoolByid(schoolId));
+        return new SchoolResponseDto(schoolService.deleteSchoolById(schoolId));
     }
 
     @RequestMapping(value = "school/{schoolId}", method = RequestMethod.PATCH)

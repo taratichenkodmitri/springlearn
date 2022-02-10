@@ -1,6 +1,11 @@
 package com.springlearn.entity;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import javax.persistence.*;
+import java.io.IOException;
+import java.util.HashMap;
 
 
 @Entity
@@ -14,13 +19,23 @@ public class Student {
 
     private Long uin;
 
-    public Student(String name, Long uin) {
-        this.name = name;
-        this.uin = uin;
-    }
+    private String questionably;
 
     public Student() {
+    }
 
+    public Student(String name, Long uin, String questionably) {
+        this.name = name;
+        this.uin = uin;
+        this.questionably = questionably;
+    }
+
+    public String getQuestionably() {
+        return questionably;
+    }
+
+    public void setQuestionably(String questionably) {
+        this.questionably = questionably;
     }
 
     public Long getStudentId() {
@@ -53,6 +68,15 @@ public class Student {
                 "studentId=" + studentId +
                 ", name='" + name + '\'' +
                 ", uin=" + uin +
+                ", questionably='" + questionably + '\'' +
                 '}';
+    }
+
+    public HashMap<String,Object> getQuestionablyFromStringToMap( ) throws IOException {
+        ObjectMapper jsonMapper = new ObjectMapper();
+        TypeReference<HashMap<String,Object>> typeRef
+                = new TypeReference<HashMap<String,Object>>() {};
+        HashMap<String,Object> hashMap = jsonMapper.readValue(questionably, typeRef);
+        return hashMap;
     }
 }
