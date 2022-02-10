@@ -1,22 +1,19 @@
 package com.springlearn.config;
 
 import org.apache.commons.dbcp2.BasicDataSource;
+import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.annotation.*;
 import org.springframework.core.env.Environment;
-import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
-import org.springframework.orm.jpa.JpaTransactionManager;
-import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
-import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
-import org.springframework.transaction.PlatformTransactionManager;
+
+import org.springframework.orm.hibernate5.HibernateTransactionManager;
+import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+
 
 import java.util.Properties;
 
 @Configuration
-@EnableJpaRepositories("com.springlearn.repository")
 @EnableTransactionManagement
 @PropertySource("classpath:db.properties")
 public class DatabaseConfig {
@@ -24,26 +21,25 @@ public class DatabaseConfig {
     @Autowired
     private Environment environment;
 
-    @Bean(name = "entityManagerFactory")
-    public LocalContainerEntityManagerFactoryBean entityManagerFactoryBean() {
-        LocalContainerEntityManagerFactoryBean entityManagerFactoryBean = new LocalContainerEntityManagerFactoryBean();
-        entityManagerFactoryBean.setDataSource(basicDataSource());
-        entityManagerFactoryBean.setPackagesToScan("com.springlearn.entity");
-        entityManagerFactoryBean.setJpaVendorAdapter(new HibernateJpaVendorAdapter());
-        entityManagerFactoryBean.setJpaProperties(hibernateProperties());
+    @Bean
+    LocalSessionFactoryBean sessionFactoryBean() {
+        LocalSessionFactoryBean localSessionFactoryBean = new LocalSessionFactoryBean();
+        localSessionFactoryBean.setDataSource(basicDataSource());
+        localSessionFactoryBean.setHibernateProperties(hibernateProperties());
+        localSessionFactoryBean.setPackagesToScan("com.springlearn.entity");
 
-        return entityManagerFactoryBean;
+        return  localSessionFactoryBean;
     }
 
     @Bean
-    public PlatformTransactionManager transactionManager() {
-        JpaTransactionManager transactionManager = new JpaTransactionManager();
-        transactionManager.setEntityManagerFactory(entityManagerFactoryBean().getObject());
+    @Autowired
+    public HibernateTransactionManager hibernateTransactionManager(SessionFactory sessionFactory) {
+        HibernateTransactionManager hibernateTransactionManager = new HibernateTransactionManager();
+        hibernateTransactionManager.setSessionFactory(sessionFactory);
 
-        return transactionManager;
+        return hibernateTransactionManager;
     }
 
-    @Bean
     public BasicDataSource basicDataSource() {
         BasicDataSource basicDataSource = new BasicDataSource();
         basicDataSource.setDriverClassName(environment.getProperty("jdbc.driverClassName"));
@@ -54,7 +50,6 @@ public class DatabaseConfig {
         return basicDataSource;
     }
 
-    @Bean
     public Properties hibernateProperties() {
         Properties properties = new Properties();
         properties.setProperty("hibernate.hbm2ddl.auto",

@@ -1,6 +1,11 @@
 package com.springlearn.controller.dto;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.springlearn.entity.Student;
+
+import java.io.IOException;
+import java.util.HashMap;
 
 public class StudentResponseDto {
 
@@ -10,16 +15,28 @@ public class StudentResponseDto {
 
     private Long uin;
 
-    public StudentResponseDto(Long studentId, String name, Long uin) {
+    HashMap<String,Object> questionably;
+
+    public StudentResponseDto(Long studentId, String name, Long uin, HashMap<String,Object> questionably) {
         this.studentId = studentId;
         this.name = name;
         this.uin = uin;
+        this.questionably = questionably;
     }
 
-    public StudentResponseDto(Student student){
+    public StudentResponseDto(Student student) throws IOException {
         studentId = student.getStudentId();
         name = student.getName();
         uin = student.getUin();
+        questionably = student.getQuestionablyFromStringToMap();
+    }
+
+    public HashMap<String,Object> getQuestionably() {
+        return questionably;
+    }
+
+    public void setQuestionably(HashMap<String,Object> questionably) {
+        this.questionably = questionably;
     }
 
     public Long getStudentId() {

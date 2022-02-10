@@ -1,11 +1,22 @@
 package com.springlearn.controller.dto;
 
+import java.util.HashMap;
+
 public class StudentRequestDto {
 
     private String name;
 
     private Long uin;
 
+    HashMap<String,Object> questionably;
+
+    public HashMap<String,Object> getQuestionably() {
+        return questionably;
+    }
+
+    public void setQuestionably(HashMap<String,Object> questionably) {
+        this.questionably = questionably;
+    }
     public String getName() {
         return name;
     }
@@ -20,5 +31,14 @@ public class StudentRequestDto {
 
     public void setUin(Long uin) {
         this.uin = uin;
+    }
+
+    public String getQuestionablyToString() {
+        StringBuilder mapAsString = new StringBuilder("{");
+        for (String key : questionably.keySet()) {
+            mapAsString.append("\"" + key + "\"" + ":" + "\"" + questionably.get(key) + "\"" + ",");
+        }
+        mapAsString.delete(mapAsString.length()-1, mapAsString.length()).append("}");
+        return mapAsString.toString();
     }
 }
