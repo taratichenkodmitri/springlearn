@@ -38,19 +38,19 @@ public class EducationController {
     }
 
     @RequestMapping(value = "/educationForStudents/{studentId}", method = RequestMethod.DELETE)
-    public EducationResponseDto deleteEducationByStudentId(@PathVariable Long studentId) throws ExceptionCurrentEducationNotFound, ExceptionEducationNotFound {
+    public EducationResponseDto deleteEducationByStudentId(@PathVariable Long studentId) throws ExceptionCurrentEducationNotFound, ExceptionEducationNotFound, ExceptionStudentNotFound {
         return new EducationResponseDto(educationService.deleteEducationByStudentId(studentId));
     }
 
     @RequestMapping(value = "/education/{educationId}", method = RequestMethod.DELETE)
-    public EducationResponseDto deleteEducation(@PathVariable Long educationId) {
+    public EducationResponseDto deleteEducation(@PathVariable Long educationId) throws ExceptionEducationNotFound {
         return new EducationResponseDto(educationService.deleteEducationById(educationId));
     }
 
     @RequestMapping(value = "/education/{educationId}", method = RequestMethod.PATCH)
     public EducationResponseDto updateEducation(@PathVariable Long educationId,
                                      @RequestBody EducationRequestDto educationRequestDto) throws ExceptionEducationNotFound {
-        return new EducationResponseDto(educationService.updateSchool(educationId,
+        return new EducationResponseDto(educationService.updateEducation(educationId,
                 educationRequestDto.getStudentId(),
                 educationRequestDto.getSchoolId(),
                 educationRequestDto.getCurrent()));

@@ -45,12 +45,16 @@ public class EducationService {
                 = new TypeReference<HashMap<String,Object>>() {};
         HashMap<String,Object> questionably = jsonMapper.readValue(student.getQuestionably(), typeRef);
 
-        System.out.println(listQuestionCodes);
-        System.out.println(questionably);
-
         for (String key : questionably.keySet()) {
             if(!listQuestionCodes.contains(key)) {
                 throw new ExceptionNotValidQuestionably(key);
+            }
+        }
+
+        List<Education> allEducationsForStudent = getAllEducationsForStudent(studentId);
+        for(Education ed: allEducationsForStudent){
+            if(ed.getCurrent()) {
+                throw new ExceptionAlreadyCurrentEducation(ed.getSchoolId());
             }
         }
 
@@ -58,20 +62,35 @@ public class EducationService {
     }
 
     public Education findEducationById(Long educationId) throws ExceptionEducationNotFound {
-        return educationRepository.findById(educationId);
+        Education education = educationRepository.findById(educationId);
+        if(education == null) {
+            throw new ExceptionEducationNotFound(educationId);
+        }
+        return education;
     }
 
-    public Education updateSchool(Long educationId, Long studentId, Long schoolId, Boolean current) throws ExceptionEducationNotFound {
-        return educationRepository.updateById(educationId, new Education(studentId, schoolId, current));
+    public Education updateEducation(Long educationId, Long studentId, Long schoolId, Boolean current) throws ExceptionEducationNotFound {
+        Education updatedEducation = findEducationById(educationId);
+        return educationRepository.updateById(updatedEducation, new Education(studentId, schoolId, current));
     }
 
 
-    public Education deleteEducationById(Long educationId) {
-        return educationRepository.deleteById(educationId);
+    public Education deleteEducationById(Long educationId) throws ExceptionEducationNotFound {
+        Education education = findEducationById(educationId);
+        return educationRepository.deleteById(education);
     }
 
-    public Education deleteEducationByStudentId(Long studentId) throws ExceptionCurrentEducationNotFound, ExceptionEducationNotFound {
-        return educationRepository.deleteByStudentId(studentId);
+    public Education deleteEducationByStudentId(Long studentId) throws ExceptionCurrentEducationNotFound, ExceptionStudentNotFound, ExceptionEducationNotFound {
+        Student student = studentService.findStudentById(studentId);
+        List<Education> allEducationsForStudent = getAllEducationsForStudent(student.getStudentId());
+        for(Education ed: allEducationsForStudent){
+            if(ed.getCurrent()) {
+                ed.setCurrent(false);
+                updateEducation(ed.getEducationId(), ed.getStudentId(), ed.getSchoolId(), false);
+                return ed;
+            }
+        }
+        throw new ExceptionCurrentEducationNotFound();
     }
 
     public List<Education> getAllEducationsForStudent(Long studentId){

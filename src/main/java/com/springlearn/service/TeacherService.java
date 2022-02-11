@@ -20,14 +20,21 @@ public class TeacherService {
     }
 
     public Teacher findTeacherById(Long teacherId) throws ExceptionTeacherNotFound {
-        return teacherRepository.findById(teacherId);
+        Teacher teacher = teacherRepository.findById(teacherId);
+        if(teacher == null) {
+            throw new ExceptionTeacherNotFound(teacherId);
+        }
+        return teacher;
     }
 
     public Teacher updateTeacher(Long teacherId, String name, Long uin) throws ExceptionTeacherNotFound {
-        return teacherRepository.updateById(teacherId, new Teacher(name, uin));
+        Teacher teacher = findTeacherById(teacherId);
+        Teacher updatedTeacher = teacherRepository.updateById(teacher, new Teacher(name, uin));
+        return updatedTeacher;
     }
 
     public Teacher deleteTeacherById(Long teacherId) throws ExceptionTeacherNotFound {
-        return teacherRepository.deleteById(teacherId);
+        Teacher teacher = findTeacherById(teacherId);
+        return teacherRepository.deleteById(teacher);
     }
 }

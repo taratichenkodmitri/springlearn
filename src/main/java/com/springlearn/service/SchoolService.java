@@ -20,14 +20,20 @@ public class SchoolService {
     }
 
     public School findSchoolById(Long schoolId) throws ExceptionSchoolNotFound {
-        return schoolRepository.findById(schoolId);
+        School school = schoolRepository.findById(schoolId);
+        if(school == null) {
+            throw new ExceptionSchoolNotFound(schoolId);
+        }
+        return school;
     }
 
     public School updateSchool(Long schoolId, String title, Long type) throws ExceptionSchoolNotFound {
-        return schoolRepository.updateById(schoolId, new School(title, type));
+        School updatedSchool = findSchoolById(schoolId);
+        return schoolRepository.updateById(updatedSchool, new School(title, type));
     }
 
     public School deleteSchoolById(Long schoolId) throws ExceptionSchoolNotFound {
-        return schoolRepository.deleteById(schoolId);
+        School school = findSchoolById(schoolId);
+        return schoolRepository.deleteById(school);
     }
 }

@@ -27,24 +27,17 @@ public class TeacherRepository {
         return teacher;
     }
 
-    public Teacher findById(Long teacherId) throws ExceptionTeacherNotFound {
+    public Teacher findById(Long teacherId){
         Session session = sessionFactory.openSession();
         Teacher teacher = session.find(Teacher.class, teacherId);
-        if(teacher == null) {
-            throw new ExceptionTeacherNotFound(teacherId);
-        }
         session.close();
 
         return teacher;
     }
 
-    public Teacher updateById(Long teacherId, Teacher teacher) throws ExceptionTeacherNotFound {
+    public Teacher updateById(Teacher updatedTeacher, Teacher teacher) {
         Session session = sessionFactory.openSession();
         session.beginTransaction();
-        Teacher updatedTeacher = session.find(Teacher.class, teacherId);
-        if(updatedTeacher == null) {
-            throw new ExceptionTeacherNotFound(teacherId);
-        }
         updatedTeacher.setName(teacher.getName());
         updatedTeacher.setUin(teacher.getUin());
         session.update(updatedTeacher);
@@ -55,13 +48,9 @@ public class TeacherRepository {
         return updatedTeacher;
     }
 
-    public Teacher deleteById(Long teacherId) throws ExceptionTeacherNotFound {
+    public Teacher deleteById(Teacher teacher) {
         Session session = sessionFactory.openSession();
         session.beginTransaction();
-        Teacher teacher = session.find(Teacher.class, teacherId);
-        if(teacher == null) {
-            throw new ExceptionTeacherNotFound(teacherId);
-        }
         session.delete(teacher);
         session.flush();
         session.getTransaction().commit();

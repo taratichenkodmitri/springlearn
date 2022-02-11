@@ -26,24 +26,17 @@ public class StudentRepository {
         return student;
     }
 
-    public Student findById(Long studentId) throws ExceptionStudentNotFound {
+    public Student findById(Long studentId) {
         Session session = sessionFactory.openSession();
         Student student = session.find(Student.class, studentId);
-        if(student == null) {
-            throw new ExceptionStudentNotFound(studentId);
-        }
         session.close();
 
         return student;
     }
     
-    public Student updateById(Long studentId, Student student) throws ExceptionStudentNotFound {
+    public Student updateById(Student updatedStudent, Student student) {
         Session session = sessionFactory.openSession();
         session.beginTransaction();
-        Student updatedStudent = session.find(Student.class, studentId);
-        if(updatedStudent == null) {
-            throw new ExceptionStudentNotFound(studentId);
-        }
         updatedStudent.setName(student.getName());
         updatedStudent.setUin(student.getUin());
         session.update(updatedStudent);
@@ -54,13 +47,9 @@ public class StudentRepository {
         return updatedStudent;
     }
 
-    public Student deleteById(Long studentId) throws ExceptionStudentNotFound {
+    public Student deleteById(Student student) {
         Session session = sessionFactory.openSession();
         session.beginTransaction();
-        Student student = session.find(Student.class, studentId);
-        if(student == null) {
-            throw new ExceptionStudentNotFound(studentId);
-        }
         session.delete(student);
         session.flush();
         session.getTransaction().commit();

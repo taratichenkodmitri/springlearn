@@ -21,15 +21,21 @@ public class StudentService {
     }
 
     public Student findStudentById(Long studentId) throws ExceptionStudentNotFound {
-        return studentRepository.findById(studentId);
+        Student student = studentRepository.findById(studentId);
+        if(student == null) {
+            throw new ExceptionStudentNotFound(studentId);
+        }
+        return student;
     }
 
     public Student updateStudent(Long studentId, String name, Long uin, String questionably) throws ExceptionStudentNotFound {
-        return studentRepository.updateById(studentId, new Student(name, uin, questionably));
+        Student updatedStudent = findStudentById(studentId);
+        return studentRepository.updateById(updatedStudent, new Student(name, uin, questionably));
     }
 
     public Student deleteStudentById(Long studentId) throws ExceptionStudentNotFound {
-        return studentRepository.deleteById(studentId);
+        Student student = findStudentById(studentId);
+        return studentRepository.deleteById(student);
     }
 
 }

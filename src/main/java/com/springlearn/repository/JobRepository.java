@@ -23,14 +23,6 @@ public class JobRepository {
     public Job save(Job job) throws ExceptionTeacherNotFound, ExceptionSchoolNotFound {
         Session session = sessionFactory.openSession();
         session.beginTransaction();
-
-        if(session.find(Teacher.class, job.getTeacherId()) == null) {
-            throw new ExceptionTeacherNotFound(job.getTeacherId());
-        }
-        if(session.find(School.class, job.getSchoolId()) == null) {
-            throw new ExceptionSchoolNotFound(job.getSchoolId());
-        }
-
         session.save(job);
         session.flush();
         session.getTransaction().commit();
@@ -38,23 +30,16 @@ public class JobRepository {
         return job;
     }
 
-    public Job findById(Long jobId) throws ExceptionJobNotFound {
+    public Job findById(Long jobId) {
         Session session = sessionFactory.openSession();
         Job job = session.find(Job.class, jobId);
-        if(job == null) {
-            throw new ExceptionJobNotFound(jobId);
-        }
         session.close();
         return job;
     }
 
-    public Job updateById(Long jobId, Job job) throws ExceptionJobNotFound {
+    public Job updateById(Job updatedJob, Job job) {
         Session session = sessionFactory.openSession();
         session.beginTransaction();
-        Job updatedJob = session.find(Job.class, jobId);
-        if(updatedJob == null) {
-            throw new ExceptionJobNotFound(jobId);
-        }
         updatedJob.setTeacherId(job.getTeacherId());
         updatedJob.setSchoolId(job.getSchoolId());
         session.update(updatedJob);
@@ -65,13 +50,9 @@ public class JobRepository {
         return updatedJob;
     }
 
-    public Job deleteById(Long jobId) throws ExceptionJobNotFound {
+    public Job deleteById(Job job) {
         Session session = sessionFactory.openSession();
         session.beginTransaction();
-        Job job = session.find(Job.class, jobId);
-        if(job == null) {
-            throw new ExceptionJobNotFound(jobId);
-        }
         session.delete(job);
         session.flush();
         session.getTransaction().commit();
