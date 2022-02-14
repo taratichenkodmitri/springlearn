@@ -1,7 +1,6 @@
 package com.springlearn.repository;
 
-import com.springlearn.entity.*;
-import com.springlearn.exception.ExceptionJobNotFound;
+import com.springlearn.entity.Job;
 import com.springlearn.exception.ExceptionSchoolNotFound;
 import com.springlearn.exception.ExceptionTeacherNotFound;
 import org.hibernate.Session;
@@ -61,7 +60,7 @@ public class JobRepository {
         return job;
     }
 
-    public List<Job> getAllJobsForTeacher(Long teacherId){
+    public List<Job> getAllJobsForTeacher(Long teacherId) {
         List<Job> jobs;
         Session session = sessionFactory.openSession();
         session.beginTransaction();

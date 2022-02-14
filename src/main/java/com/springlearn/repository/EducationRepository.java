@@ -1,8 +1,6 @@
 package com.springlearn.repository;
 
 import com.springlearn.entity.Education;
-import com.springlearn.entity.Student;
-import com.springlearn.exception.*;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,15 +62,15 @@ public class EducationRepository {
         return education;
     }
 
-    public List<Education> getAllEducationsForStudent(Long studentId){
-            List<Education> educations;
-            Session session = sessionFactory.openSession();
-            session.beginTransaction();
-            educations = session
-                    .createSQLQuery("SELECT * FROM Education as e WHERE e.studentId = " + studentId)
-                    .addEntity(Education.class).list();
+    public List<Education> getAllEducationsForStudent(Long studentId) {
+        List<Education> educations;
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+        educations = session
+                .createSQLQuery("SELECT * FROM Education as e WHERE e.studentId = " + studentId)
+                .addEntity(Education.class).list();
 
-            return educations;
+        return educations;
     }
 
 
@@ -82,6 +80,6 @@ public class EducationRepository {
         List<String> listQuestionCode = session
                 .createSQLQuery("SELECT value FROM QuestionCode AS q WHERE q.type = " + type)
                 .list();
-        return  Arrays.stream(listQuestionCode.get(0).split(",")).collect(Collectors.toList());
+        return Arrays.stream(listQuestionCode.get(0).split(",")).collect(Collectors.toList());
     }
 }

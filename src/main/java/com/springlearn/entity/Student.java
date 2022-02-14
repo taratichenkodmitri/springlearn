@@ -3,7 +3,10 @@ package com.springlearn.entity;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import java.io.IOException;
 import java.util.HashMap;
 
@@ -72,11 +75,11 @@ public class Student {
                 '}';
     }
 
-    public HashMap<String,Object> getQuestionablyFromStringToMap( ) throws IOException {
+    public HashMap<String, Object> getQuestionablyFromStringToMap() throws IOException {
         ObjectMapper jsonMapper = new ObjectMapper();
-        TypeReference<HashMap<String,Object>> typeRef
-                = new TypeReference<HashMap<String,Object>>() {};
-        HashMap<String,Object> hashMap = jsonMapper.readValue(questionably, typeRef);
-        return hashMap;
+        TypeReference<HashMap<String, Object>> typeRef
+                = new TypeReference<HashMap<String, Object>>() {
+        };
+        return jsonMapper.readValue(questionably, typeRef);
     }
 }

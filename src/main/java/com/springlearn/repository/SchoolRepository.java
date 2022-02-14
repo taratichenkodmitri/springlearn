@@ -1,7 +1,6 @@
 package com.springlearn.repository;
 
 import com.springlearn.entity.School;
-import com.springlearn.exception.ExceptionSchoolNotFound;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;

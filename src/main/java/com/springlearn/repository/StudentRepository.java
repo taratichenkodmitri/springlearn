@@ -1,7 +1,6 @@
 package com.springlearn.repository;
 
 import com.springlearn.entity.Student;
-import com.springlearn.exception.ExceptionStudentNotFound;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +32,7 @@ public class StudentRepository {
 
         return student;
     }
-    
+
     public Student updateById(Student updatedStudent, Student student) {
         Session session = sessionFactory.openSession();
         session.beginTransaction();

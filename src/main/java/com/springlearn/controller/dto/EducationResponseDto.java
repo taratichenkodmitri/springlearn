@@ -12,7 +12,7 @@ public class EducationResponseDto {
 
     private Boolean current;
 
-    public EducationResponseDto(Education education){
+    public EducationResponseDto(Education education) {
         educationId = education.getEducationId();
         studentId = education.getStudentId();
         schoolId = education.getSchoolId();

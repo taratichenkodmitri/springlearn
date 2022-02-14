@@ -3,9 +3,9 @@ package com.springlearn.controller;
 import com.springlearn.controller.dto.JobRequestDto;
 import com.springlearn.controller.dto.JobResponseDto;
 import com.springlearn.exception.ExceptionJobNotFound;
-import com.springlearn.exception.Exceptions;
 import com.springlearn.exception.ExceptionSchoolNotFound;
 import com.springlearn.exception.ExceptionTeacherNotFound;
+import com.springlearn.exception.Exceptions;
 import com.springlearn.exception.response.ResponseException;
 import com.springlearn.service.JobService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,15 +40,15 @@ public class JobController {
     }
 
     @RequestMapping(value = "/job/{jobId}", method = RequestMethod.PATCH)
-    public JobResponseDto updateJob (@PathVariable Long jobId,
-                                                @RequestBody JobRequestDto jobRequestDto) throws ExceptionJobNotFound {
+    public JobResponseDto updateJob(@PathVariable Long jobId,
+                                    @RequestBody JobRequestDto jobRequestDto) throws ExceptionJobNotFound {
         return new JobResponseDto(jobService.updateJob(jobId,
                 jobRequestDto.getTeacherId(),
                 jobRequestDto.getSchoolId()));
     }
 
     @RequestMapping(value = "/getAllJobsForTeacher/{teacherId}", method = RequestMethod.GET)
-    public List<JobResponseDto> getAllJobsForTeacher(@PathVariable Long teacherId){
+    public List<JobResponseDto> getAllJobsForTeacher(@PathVariable Long teacherId) {
         return jobService.getAllJobForTeacher(teacherId)
                 .stream()
                 .map(JobResponseDto::new).collect(Collectors.toList());

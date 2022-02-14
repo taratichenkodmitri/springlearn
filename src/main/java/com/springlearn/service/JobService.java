@@ -1,8 +1,6 @@
 package com.springlearn.service;
 
 import com.springlearn.entity.Job;
-import com.springlearn.entity.School;
-import com.springlearn.entity.Teacher;
 import com.springlearn.exception.ExceptionJobNotFound;
 import com.springlearn.exception.ExceptionSchoolNotFound;
 import com.springlearn.exception.ExceptionTeacherNotFound;
@@ -33,7 +31,7 @@ public class JobService {
 
     public Job findJobById(Long jobId) throws ExceptionJobNotFound {
         Job job = jobRepository.findById(jobId);
-        if(job == null) {
+        if (job == null) {
             throw new ExceptionJobNotFound(jobId);
         }
         return job;
@@ -50,7 +48,7 @@ public class JobService {
         return jobRepository.deleteById(job);
     }
 
-    public List<Job> getAllJobForTeacher(Long jobId){
+    public List<Job> getAllJobForTeacher(Long jobId) {
         return jobRepository.getAllJobsForTeacher(jobId);
     }
 }

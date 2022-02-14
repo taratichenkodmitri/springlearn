@@ -21,13 +21,13 @@ public class SchoolService {
 
     public School findSchoolById(Long schoolId) throws ExceptionSchoolNotFound {
         School school = schoolRepository.findById(schoolId);
-        if(school == null) {
+        if (school == null) {
             throw new ExceptionSchoolNotFound(schoolId);
         }
         return school;
     }
 
-    public School updateSchool(Long schoolId, String title, Long type) throws ExceptionSchoolNotFound {
+    public School updateSchoolById(Long schoolId, String title, Long type) throws ExceptionSchoolNotFound {
         School updatedSchool = findSchoolById(schoolId);
         return schoolRepository.updateById(updatedSchool, new School(title, type));
     }

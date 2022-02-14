@@ -22,7 +22,7 @@ public class StudentService {
 
     public Student findStudentById(Long studentId) throws ExceptionStudentNotFound {
         Student student = studentRepository.findById(studentId);
-        if(student == null) {
+        if (student == null) {
             throw new ExceptionStudentNotFound(studentId);
         }
         return student;

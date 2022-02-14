@@ -36,7 +36,7 @@ public class TeacherController {
 
     @RequestMapping(value = "/teachers/{teacherId}", method = RequestMethod.PATCH, produces = "application/xml")
     public TeacherResponseDto updateTeacher(@RequestBody StudentRequestDto studentRequestDto,
-                                            @PathVariable Long teacherId ) throws ExceptionTeacherNotFound {
+                                            @PathVariable Long teacherId) throws ExceptionTeacherNotFound {
         return new TeacherResponseDto(teacherService.
                 updateTeacher(teacherId, studentRequestDto.getName(), studentRequestDto.getUin()));
     }

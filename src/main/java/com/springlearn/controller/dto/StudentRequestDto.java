@@ -8,15 +8,16 @@ public class StudentRequestDto {
 
     private Long uin;
 
-    HashMap<String,Object> questionably;
+    HashMap<String, Object> questionably;
 
-    public HashMap<String,Object> getQuestionably() {
+    public HashMap<String, Object> getQuestionably() {
         return questionably;
     }
 
-    public void setQuestionably(HashMap<String,Object> questionably) {
+    public void setQuestionably(HashMap<String, Object> questionably) {
         this.questionably = questionably;
     }
+
     public String getName() {
         return name;
     }
@@ -38,7 +39,7 @@ public class StudentRequestDto {
         for (String key : questionably.keySet()) {
             mapAsString.append("\"" + key + "\"" + ":" + "\"" + questionably.get(key) + "\"" + ",");
         }
-        mapAsString.delete(mapAsString.length()-1, mapAsString.length()).append("}");
+        mapAsString.delete(mapAsString.length() - 1, mapAsString.length()).append("}");
         return mapAsString.toString();
     }
 }

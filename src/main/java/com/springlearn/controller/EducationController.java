@@ -26,7 +26,7 @@ public class EducationController {
             throws ExceptionStudentNotFound,
             ExceptionSchoolNotFound,
             ExceptionAlreadyCurrentEducation,
-            IOException, ExceptionNotValidQuestionably {
+            IOException, ExceptionNotValidQuestionably, ExceptionCurrentEducationNotFound {
         return educationService.saveEducation(educationRequestDto.getStudentId(),
                 educationRequestDto.getSchoolId(),
                 educationRequestDto.getCurrent());
@@ -49,7 +49,7 @@ public class EducationController {
 
     @RequestMapping(value = "/education/{educationId}", method = RequestMethod.PATCH)
     public EducationResponseDto updateEducation(@PathVariable Long educationId,
-                                     @RequestBody EducationRequestDto educationRequestDto) throws ExceptionEducationNotFound {
+                                                @RequestBody EducationRequestDto educationRequestDto) throws ExceptionEducationNotFound {
         return new EducationResponseDto(educationService.updateEducation(educationId,
                 educationRequestDto.getStudentId(),
                 educationRequestDto.getSchoolId(),
@@ -57,7 +57,7 @@ public class EducationController {
     }
 
     @RequestMapping(value = "/educationForStudents/{studentId}", method = RequestMethod.GET)
-    public List<EducationResponseDto> getAllEducationsForStudent(@PathVariable Long studentId){
+    public List<EducationResponseDto> getAllEducationsForStudent(@PathVariable Long studentId) {
         return educationService.getAllEducationsForStudent(studentId)
                 .stream()
                 .map(EducationResponseDto::new).collect(Collectors.toList());

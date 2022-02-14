@@ -40,10 +40,10 @@ public class StudentController {
 
     @RequestMapping(value = "/students/{studentId}", method = RequestMethod.PATCH)
     public StudentResponseDto updateStudent(@RequestBody StudentRequestDto studentRequestDto,
-                                            @PathVariable Long studentId ) throws ExceptionStudentNotFound, IOException {
+                                            @PathVariable Long studentId) throws ExceptionStudentNotFound, IOException {
         return new StudentResponseDto(studentService.updateStudent(studentId, studentRequestDto.getName(),
-                                studentRequestDto.getUin(),
-                                studentRequestDto.getQuestionablyToString()));
+                studentRequestDto.getUin(),
+                studentRequestDto.getQuestionablyToString()));
     }
 
     @ExceptionHandler({ExceptionStudentNotFound.class})

@@ -21,7 +21,7 @@ public class TeacherService {
 
     public Teacher findTeacherById(Long teacherId) throws ExceptionTeacherNotFound {
         Teacher teacher = teacherRepository.findById(teacherId);
-        if(teacher == null) {
+        if (teacher == null) {
             throw new ExceptionTeacherNotFound(teacherId);
         }
         return teacher;

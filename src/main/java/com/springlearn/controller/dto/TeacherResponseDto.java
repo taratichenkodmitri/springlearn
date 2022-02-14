@@ -3,7 +3,7 @@ package com.springlearn.controller.dto;
 import com.springlearn.entity.Teacher;
 
 public class TeacherResponseDto {
-    private  Long teacherId;
+    private Long teacherId;
 
     private String name;
 

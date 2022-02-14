@@ -37,33 +37,37 @@ public class EducationService {
             ExceptionAlreadyCurrentEducation, IOException, ExceptionNotValidQuestionably {
         Student student = studentService.findStudentById(studentId);
         School school = schoolService.findSchoolById(schoolId);
+        checkQuestionably(student, school);
 
-       List<String> listQuestionCodes = educationRepository.getQuestionCodes(school.getType());
+        Education currentEducation = getCurrentEducationForStudent(studentId);
 
-        ObjectMapper jsonMapper = new ObjectMapper();
-        TypeReference<HashMap<String,Object>> typeRef
-                = new TypeReference<HashMap<String,Object>>() {};
-        HashMap<String,Object> questionably = jsonMapper.readValue(student.getQuestionably(), typeRef);
-
-        for (String key : questionably.keySet()) {
-            if(!listQuestionCodes.contains(key)) {
-                throw new ExceptionNotValidQuestionably(key);
-            }
-        }
-
-        List<Education> allEducationsForStudent = getAllEducationsForStudent(studentId);
-        for(Education ed: allEducationsForStudent){
-            if(ed.getCurrent()) {
-                throw new ExceptionAlreadyCurrentEducation(ed.getSchoolId());
-            }
+        if (currentEducation != null) {
+            throw new ExceptionAlreadyCurrentEducation(currentEducation.getSchoolId());
         }
 
         return educationRepository.save(new Education(studentId, schoolId, isCurrent)).getEducationId();
     }
 
+    public void checkQuestionably(Student student, School school) throws IOException, ExceptionNotValidQuestionably {
+
+        List<String> listQuestionCodes = educationRepository.getQuestionCodes(school.getType());
+
+        ObjectMapper jsonMapper = new ObjectMapper();
+        TypeReference<HashMap<String, Object>> typeRef
+                = new TypeReference<HashMap<String, Object>>() {
+        };
+        HashMap<String, Object> questionably = jsonMapper.readValue(student.getQuestionably(), typeRef);
+
+        for (String key : questionably.keySet()) {
+            if (!listQuestionCodes.contains(key)) {
+                throw new ExceptionNotValidQuestionably(key);
+            }
+        }
+    }
+
     public Education findEducationById(Long educationId) throws ExceptionEducationNotFound {
         Education education = educationRepository.findById(educationId);
-        if(education == null) {
+        if (education == null) {
             throw new ExceptionEducationNotFound(educationId);
         }
         return education;
@@ -81,19 +85,30 @@ public class EducationService {
     }
 
     public Education deleteEducationByStudentId(Long studentId) throws ExceptionCurrentEducationNotFound, ExceptionStudentNotFound, ExceptionEducationNotFound {
-        Student student = studentService.findStudentById(studentId);
-        List<Education> allEducationsForStudent = getAllEducationsForStudent(student.getStudentId());
-        for(Education ed: allEducationsForStudent){
-            if(ed.getCurrent()) {
-                ed.setCurrent(false);
-                updateEducation(ed.getEducationId(), ed.getStudentId(), ed.getSchoolId(), false);
+        studentService.findStudentById(studentId);
+        Education currentEducation = getCurrentEducationForStudent(studentId);
+
+        if (currentEducation == null) {
+            throw new ExceptionCurrentEducationNotFound();
+        }
+
+        return updateEducation(currentEducation.getEducationId(),
+                currentEducation.getStudentId(),
+                currentEducation.getSchoolId(),
+                false);
+    }
+
+    public Education getCurrentEducationForStudent(Long studentId) {
+        List<Education> allEducationsForStudent = getAllEducationsForStudent(studentId);
+        for (Education ed : allEducationsForStudent) {
+            if (ed.getCurrent()) {
                 return ed;
             }
         }
-        throw new ExceptionCurrentEducationNotFound();
+        return null;
     }
 
-    public List<Education> getAllEducationsForStudent(Long studentId){
+    public List<Education> getAllEducationsForStudent(Long studentId) {
         return educationRepository.getAllEducationsForStudent(studentId);
     }
 }

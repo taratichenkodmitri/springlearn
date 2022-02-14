@@ -26,7 +26,7 @@ public class SchoolController {
 
     @RequestMapping(value = "school/{schoolId}", method = RequestMethod.GET)
     public SchoolResponseDto getSchool(@PathVariable Long schoolId) throws ExceptionSchoolNotFound {
-        return  new SchoolResponseDto(schoolService.findSchoolById(schoolId));
+        return new SchoolResponseDto(schoolService.findSchoolById(schoolId));
     }
 
     @RequestMapping(value = "/school/{schoolId}", method = RequestMethod.DELETE)
@@ -38,7 +38,7 @@ public class SchoolController {
     public SchoolResponseDto updateSchool(@RequestBody SchoolRequestDto schoolRequestDto,
                                           @PathVariable Long schoolId) throws ExceptionSchoolNotFound {
         return new SchoolResponseDto(schoolService
-                .updateSchool(schoolId, schoolRequestDto.getTitle(), schoolRequestDto.getType()));
+                .updateSchoolById(schoolId, schoolRequestDto.getTitle(), schoolRequestDto.getType()));
     }
 
     @ExceptionHandler({ExceptionSchoolNotFound.class})
