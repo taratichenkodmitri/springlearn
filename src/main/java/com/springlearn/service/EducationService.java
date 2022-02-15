@@ -37,7 +37,7 @@ public class EducationService {
             ExceptionAlreadyCurrentEducation, IOException, ExceptionNotValidQuestionably {
         Student student = studentService.findStudentById(studentId);
         School school = schoolService.findSchoolById(schoolId);
-        checkQuestionably(student, school);
+        compareQuestionablyStudentAndTableOfQuestionCodes(student, school);
 
         Education currentEducation = getCurrentEducationForStudent(studentId);
 
@@ -48,7 +48,7 @@ public class EducationService {
         return educationRepository.save(new Education(studentId, schoolId, isCurrent)).getEducationId();
     }
 
-    public void checkQuestionably(Student student, School school) throws IOException, ExceptionNotValidQuestionably {
+    public void compareQuestionablyStudentAndTableOfQuestionCodes(Student student, School school) throws IOException, ExceptionNotValidQuestionably {
 
         List<String> listQuestionCodes = educationRepository.getQuestionCodes(school.getType());
 

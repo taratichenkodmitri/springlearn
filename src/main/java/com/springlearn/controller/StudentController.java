@@ -1,5 +1,6 @@
 package com.springlearn.controller;
 
+import com.springlearn.controller.dto.EducationResponseDto;
 import com.springlearn.controller.dto.StudentRequestDto;
 import com.springlearn.controller.dto.StudentResponseDto;
 import com.springlearn.exception.ExceptionStudentNotFound;
@@ -10,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 public class StudentController {
@@ -31,6 +34,18 @@ public class StudentController {
     @RequestMapping(value = "/students/{studentId}", method = RequestMethod.GET)
     public StudentResponseDto getStudent(@PathVariable Long studentId) throws ExceptionStudentNotFound, IOException {
         return new StudentResponseDto(studentService.findStudentById(studentId));
+    }
+
+    @RequestMapping(value = "/students/page/{number}", method = RequestMethod.GET)
+    public List<StudentResponseDto> getAllStudents(@PathVariable Long number) {
+        return studentService.getAllStudentPaginated(number).stream()
+                .map(student -> {
+                    try {
+                        return new StudentResponseDto(student);
+                    } catch (IOException e) {
+                    }
+                    return null;
+                }).collect(Collectors.toList());
     }
 
     @RequestMapping(value = "/students/{studentId}", method = RequestMethod.DELETE)

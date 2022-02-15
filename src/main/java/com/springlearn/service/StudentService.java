@@ -6,6 +6,8 @@ import com.springlearn.repository.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class StudentService {
 
@@ -38,4 +40,9 @@ public class StudentService {
         return studentRepository.deleteById(student);
     }
 
+    public List<Student> getAllStudentPaginated(Long number) {
+        Long sizePage = Long.valueOf(3);
+        number = number == 1 ? 0 : (number - 1) * sizePage;
+        return studentRepository.getAllStudents(number, sizePage);
+    }
 }

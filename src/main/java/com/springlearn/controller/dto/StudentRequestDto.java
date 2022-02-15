@@ -37,7 +37,10 @@ public class StudentRequestDto {
     public String getQuestionablyToString() {
         StringBuilder mapAsString = new StringBuilder("{");
         for (String key : questionably.keySet()) {
-            mapAsString.append("\"" + key + "\"" + ":" + "\"" + questionably.get(key) + "\"" + ",");
+            mapAsString.append("\"").append(key).append("\"")
+                    .append(":").
+                    append("\"").append(questionably.get(key)).append("\"")
+                    .append(",");
         }
         mapAsString.delete(mapAsString.length() - 1, mapAsString.length()).append("}");
         return mapAsString.toString();

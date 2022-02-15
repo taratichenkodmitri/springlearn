@@ -1,10 +1,13 @@
 package com.springlearn.repository;
 
+import com.springlearn.entity.Education;
 import com.springlearn.entity.Student;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 @Component
 public class StudentRepository {
@@ -57,4 +60,14 @@ public class StudentRepository {
         return student;
     }
 
+    public List<Student> getAllStudents(Long number, Long sizePage) {
+        List<Student> students;
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+        students = session
+                .createSQLQuery("SELECT * FROM Student LIMIT " +
+                        number + "," + sizePage) .addEntity(Student.class).list();
+
+        return students;
+    }
 }

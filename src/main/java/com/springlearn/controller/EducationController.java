@@ -26,7 +26,7 @@ public class EducationController {
             throws ExceptionStudentNotFound,
             ExceptionSchoolNotFound,
             ExceptionAlreadyCurrentEducation,
-            IOException, ExceptionNotValidQuestionably, ExceptionCurrentEducationNotFound {
+            IOException, ExceptionNotValidQuestionably {
         return educationService.saveEducation(educationRequestDto.getStudentId(),
                 educationRequestDto.getSchoolId(),
                 educationRequestDto.getCurrent());
