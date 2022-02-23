@@ -4,6 +4,17 @@ CREATE DATABASE IF NOT EXISTS springlearn;
 
 USE springlearn;
 
+CREATE TABLE IF NOT EXISTS User
+(
+
+    userId   BIGINT       NOT NULL AUTO_INCREMENT,
+    username VARCHAR(255) NOT NULL,
+    password VARCHAR(255)       NOT NULL,
+    role     VARCHAR(255) NOT NULL,
+    status   VARCHAR(255) NOT NULL,
+    PRIMARY KEY (userId)
+);
+
 CREATE TABLE IF NOT EXISTS Student
 (
 
