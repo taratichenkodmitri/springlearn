@@ -1,6 +1,5 @@
 package com.springlearn.repository;
 
-import com.springlearn.entity.Education;
 import com.springlearn.entity.User;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;

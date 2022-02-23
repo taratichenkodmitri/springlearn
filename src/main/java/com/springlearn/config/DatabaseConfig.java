@@ -18,8 +18,12 @@ import java.util.Properties;
 @PropertySource("classpath:db.properties")
 public class DatabaseConfig {
 
+    private final Environment environment;
+
     @Autowired
-    private Environment environment;
+    public DatabaseConfig(Environment environment) {
+        this.environment = environment;
+    }
 
     @Bean
     LocalSessionFactoryBean sessionFactoryBean() {
