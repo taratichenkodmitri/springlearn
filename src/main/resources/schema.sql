@@ -126,10 +126,3 @@ ALTER TABLE acl_entry
     ADD FOREIGN KEY (acl_object_identity) REFERENCES acl_object_identity (id);
 ALTER TABLE acl_entry
     ADD FOREIGN KEY (sid) REFERENCES acl_sid (id);
-
-INSERT INTO QuestionCode (type, value)
-VALUES (0, '01,02,03');
-INSERT INTO QuestionCode (type, value)
-VALUES (1, '04,05,06');
-INSERT INTO QuestionCode (type, value)
-VALUES (2, '01,03,06');
