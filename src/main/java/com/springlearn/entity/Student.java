@@ -12,7 +12,7 @@ import java.util.HashMap;
 
 
 @Entity
-public class Student {
+public class Student{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -41,7 +41,7 @@ public class Student {
         this.questionably = questionably;
     }
 
-    public Long getStudentId() {
+    public Long getId() {
         return studentId;
     }
 

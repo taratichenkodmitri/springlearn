@@ -8,6 +8,7 @@ import com.springlearn.exception.response.ResponseException;
 import com.springlearn.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -25,11 +26,11 @@ public class StudentController {
     }
 
     @RequestMapping(value = "/students", method = RequestMethod.POST)
-    @PreAuthorize("hasAuthority('student:write')")
-    public Long createStudent(@RequestBody StudentRequestDto studentRequestDto) {
+    @PreAuthorize("hasAuthority('student:read')")
+    public Long createStudent(@RequestBody StudentRequestDto studentRequestDto, Authentication authentication) {
         return studentService.saveStudent(studentRequestDto.getName(),
                 studentRequestDto.getUin(),
-                studentRequestDto.getQuestionablyToString());
+                studentRequestDto.getQuestionablyToString(), authentication);
     }
 
     @RequestMapping(value = "/students/{studentId}", method = RequestMethod.GET)
@@ -39,7 +40,6 @@ public class StudentController {
     }
 
     @RequestMapping(value = "/students/page/{number}", method = RequestMethod.GET)
-    @PreAuthorize("hasAuthority('student:read')")
     public List<StudentResponseDto> getAllStudents(@PathVariable Long number) {
         return studentService.getAllStudentPaginated(number).stream()
                 .map(student -> {

@@ -44,6 +44,7 @@ public class DatabaseConfig {
         return hibernateTransactionManager;
     }
 
+    @Bean
     public BasicDataSource basicDataSource() {
         BasicDataSource basicDataSource = new BasicDataSource();
         basicDataSource.setDriverClassName(environment.getProperty("jdbc.driverClassName"));

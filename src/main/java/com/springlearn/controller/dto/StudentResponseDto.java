@@ -23,7 +23,7 @@ public class StudentResponseDto {
     }
 
     public StudentResponseDto(Student student) throws IOException {
-        studentId = student.getStudentId();
+        studentId = student.getId();
         name = student.getName();
         uin = student.getUin();
         questionably = student.getQuestionablyFromStringToMap();
