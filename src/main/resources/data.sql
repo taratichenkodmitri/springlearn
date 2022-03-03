@@ -6,6 +6,6 @@ INSERT INTO QuestionCode (type, value)
 VALUES (2, '01,03,06');
 
 INSERT INTO  User (username, password, role, status)
-VALUES ('user','$2a$12$xep9dR9al0l3Xdv86lHq9uDkVxQIrnIaNB9xFuW2G4Cf/pBkKUyTy', 'USER','ACTIVE')
+VALUES ('user','$2a$12$xep9dR9al0l3Xdv86lHq9uDkVxQIrnIaNB9xFuW2G4Cf/pBkKUyTy', 'USER','ACTIVE');
 INSERT INTO  User (username, password, role, status)
-VALUES ('admin','$2a$12$xep9dR9al0l3Xdv86lHq9uDkVxQIrnIaNB9xFuW2G4Cf/pBkKUyTy', 'TEACHER','ACTIVE')
+VALUES ('admin','$2a$12$xep9dR9al0l3Xdv86lHq9uDkVxQIrnIaNB9xFuW2G4Cf/pBkKUyTy', 'TEACHER','ACTIVE');
